@@ -1,20 +1,12 @@
-<div class='card'>
-  <h2 class='card__title'>{{name}}</h2>
-  <div class='card__body'>
-    <div class='card__text-wrapper'>
-      <p class='card__text'><span class='card__item'>Capital:</span>{{capital}}</p>
-      <p class='card__text'>
-        <span class='card__item'>Population:</span>{{population}}
-      </p>
-      <p class='card__text'><span class='card__item'>Languages:</span></p>
-      <ul class='list-group'>
-        {{#each languages}}
-          <li class='list-group-item'>{{this.name}}</li>
-        {{/each}}
-      </ul>
-    </div>
-    <div class='card-img'>
-      <img src='{{flag}}' width='400' alt='{{name}}' />
-    </div>
-  </div>
-</div>
+<h1 class='country-title'>
+  <img width='50' src='{{flag}}' alt='{{name}}' />
+  <span class='country-name'>{{name}}</span>
+</h1>
+<p class='country-info'><b>Capital:</b> {{capital}}</p>
+<p class='country-info'><b>Population:</b> {{population}}</p>
+
+<span class='country-info'><b class='card__item'>Languages:</b></span>
+
+{{#each languages}}
+  <span class='lang-item'>{{this.name}}</span>
+{{/each}}
