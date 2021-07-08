@@ -26,7 +26,6 @@ function onSearch(e) {
 
   if (searchQuery === '') {
     clearMarkup(refs.countryInfo, refs.countryList);
-
     return;
   }
 
@@ -37,19 +36,17 @@ function renderCountryCard(country) {
   clearMarkup(refs.countryInfo, refs.countryList);
 
   if (country.length > 10) {
-    Notiflix.Notify.info('Too many mathes found. Please enter a more specific name!');
+    makeNotificationInfo('Too many mathes found. Please enter a more specific name!');
   } else if (country.length > 1 && country.length < 11) {
     makeMarkup(refs.countryList, countryListTpl(country));
   } else if (country.length === 1) {
     makeMarkup(refs.countryInfo, countryCardTpl(country[0]));
-  } else if (country.status === 404) {
-    Notiflix.Notify.failure('Oops, there is no country with that name');
   }
 }
 
 function onFetchError(error) {
-  Notiflix.Notify.failure('Thomething wrong!');
-  console.log(error);
+  clearMarkup(refs.countryInfo, refs.countryList);
+  makeNotificationError('Oops, there is no country with that name');
 }
 
 function makeMarkup(element, markup) {
@@ -58,4 +55,12 @@ function makeMarkup(element, markup) {
 
 function clearMarkup(...args) {
   args.forEach(element => (element.innerHTML = ''));
+}
+
+function makeNotificationInfo(text) {
+  Notiflix.Notify.info(text);
+}
+
+function makeNotificationError(text) {
+  Notiflix.Notify.failure(text);
 }
