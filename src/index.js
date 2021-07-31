@@ -6,7 +6,8 @@ const DEBOUNCE_DELAY = 300;
 import countryCardTpl from './templates/country-card.hbs';
 import countryListTpl from './templates/country-list.hbs';
 
-import API from './js/fetchCountries';
+// import API from './js/fetchCountries';
+import fetchCountries from './js/fetchCountries';
 import getRefs from './js/get-refs';
 const refs = getRefs();
 
@@ -21,7 +22,7 @@ Notiflix.Notify.init({
 
 refs.inputField.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
-function onSearch(e) {
+async function onSearch(e) {
   const searchQuery = e.target.value;
 
   if (searchQuery === '') {
@@ -29,7 +30,13 @@ function onSearch(e) {
     return;
   }
 
-  API.fetchCountries(searchQuery).then(renderCountryCard).catch(onFetchError);
+  // fetchCountries(searchQuery).then(renderCountryCard).catch(onFetchError);
+  try {
+    const fetchedCountries = await fetchCountries(searchQuery);
+    renderCountryCard(fetchedCountries);
+  } catch (error) {
+    onFetchError(error);
+  }
 }
 
 function renderCountryCard(country) {
@@ -41,16 +48,25 @@ function renderCountryCard(country) {
     makeMarkup(refs.countryList, countryListTpl(country));
   } else if (country.length === 1) {
     makeMarkup(refs.countryInfo, countryCardTpl(country[0]));
+    makeMarkupLanguages(country[0].languages);
   }
 }
 
 function onFetchError(error) {
+  console.log(error);
   clearMarkup(refs.countryInfo, refs.countryList);
   makeNotificationError('Oops, there is no country with that name');
 }
 
 function makeMarkup(element, markup) {
   element.innerHTML = markup;
+}
+
+function makeMarkupLanguages(languages) {
+  const languagesMarkup = languages.map(e => e.name).join(', ');
+  const languagesListEl = document.querySelector('.country-info:last-child');
+
+  languagesListEl.insertAdjacentHTML('beforeend', languagesMarkup);
 }
 
 function clearMarkup(...args) {

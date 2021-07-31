@@ -48,6 +48,6 @@ body {
   font-size: 22px;
 }
 
-.lang-item:not(:last-child)::after {
+/* .lang-item:not(:last-child)::after {
   content: ',';
-}
+} */
